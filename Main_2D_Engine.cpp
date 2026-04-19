@@ -38,9 +38,9 @@ int main() {
                 window.close();
             if (event->is<sf::Event::KeyPressed>()) {                                                //check if the event is a key press
                 if (event->getIf<sf::Event::KeyPressed>()->code == sf::Keyboard::Key::Up) {          // If pressing the up key, increase the spring const
-                    k += 10.f;}
+                    system.setk(system.getk() + 10.f);}
                 else if (event->getIf<sf::Event::KeyPressed>()->code == sf::Keyboard::Key::Down) {
-                    k -= 10.f;
+                    system.setk(system.getk() - 10.f);
                 }
             
             }
@@ -57,7 +57,7 @@ int main() {
     
 
         // set the string to display
-        text.setString("k = " + std::to_string(k));
+        text.setString("k = " + std::to_string(system.getk()));
         // Set position (x, y)
         text.setPosition({700.f, 10.f});
         window.display();

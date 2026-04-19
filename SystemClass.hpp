@@ -57,7 +57,7 @@ ChainSystem::ChainSystem(int N, int k, float ball_radius, float x_pixels, float 
     for (int i = 0; i < N; i++){
         if (i == 0){fin_dist = fin_dist + ball_radius + 2*hx;}
         else {fin_dist = fin_dist + ball_radius*2 + hx;}
-        pos.push_back(Vec2{float(fin_dist*0.2), float(y_pixels/2)}); // distribute the balls evenly in the vertical direction
+        pos.push_back(Vec2{float(fin_dist), float(y_pixels/2)}); // distribute the balls evenly in the vertical direction
         vel.push_back(Vec2{0.f, 0.f});
         force.push_back(Vec2{0.f, 0.f});
     }
@@ -95,9 +95,16 @@ void ChainSystem::integrate(float dt){
         }else if (pos[i].x < ball_radius){
             pos[i].x = ball_radius;
             vel[i].x = -vel[i].x * 0.5f; // reverse velocity and apply damping
+        }else if (pos[i].y > (y_pixels - ball_radius)){
+            pos[i].y = y_pixels - ball_radius;
+            vel[i].y = -vel[i].y * 0.5f; // reverse velocity and apply damping
+        }else if (pos[i].y < ball_radius){
+            pos[i].y = ball_radius;
+            vel[i].y = -vel[i].y * 0.5f; // reverse velocity and apply damping
         }
     }
 }
+
 
 void ChainSystem::update(float dt){
     computeForces();
