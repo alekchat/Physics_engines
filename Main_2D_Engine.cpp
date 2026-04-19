@@ -57,9 +57,10 @@ int main() {
     
 
         // set the string to display
-        text.setString("k = " + std::to_string(system.getk()));
+        //text.setString("Use up and down keys to change the spring constant. \n ");
+        text.setString("k = " + std::to_string(system.getk())+" \nUse up and down keys \nto change the spring constant.");
         // Set position (x, y)
-        text.setPosition({700.f, 10.f});
+        text.setPosition({600.f, 10.f});
         window.display();
     }
 

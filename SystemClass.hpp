@@ -51,22 +51,27 @@ ChainSystem::ChainSystem(int N, int k, float ball_radius, float x_pixels, float 
     this->x_pixels = x_pixels;
     this->y_pixels = y_pixels;
     hx = (x_pixels - N*ball_radius*2)/(N+1);    // overal distance that remains if we remove the diameter
-    hy = (x_pixels - N*ball_radius*2)/(N+1);    // of the sum of the balls from the total height
+    hy = (y_pixels - N*ball_radius*2)/(N+1);    // of the sum of the balls from the total height
 
     int fin_dist = 0; // distance between the centers of the balls
     for (int i = 0; i < N; i++){
         if (i == 0){fin_dist = fin_dist + ball_radius + 2*hx;}
         else {fin_dist = fin_dist + ball_radius*2 + hx;}
-        pos.push_back(Vec2{float(fin_dist), float(y_pixels/2)}); // distribute the balls evenly in the vertical direction
+        pos.push_back(Vec2{float(fin_dist*0.2), float(y_pixels/2)}); // distribute the balls evenly in the vertical direction
         vel.push_back(Vec2{0.f, 0.f});
         force.push_back(Vec2{0.f, 0.f});
     }
 }
 
 
+// Vec2 ChainSystem::force_mag(Vec2 d, Vec2 du){ // num 15 is arbitrary (is in pixel units), it is the distance at which the force starts to be linear, before that it is quadratic to avoid instability
+//     return((d.x >= 15)||(d.y >= 15)) ? Vec2{k * (d.x - (hx+ball_radius*2)) + du.x * 0.5f, k * (d.y - (hy+ball_radius*2)) + du.y * 0.5f}
+//                     : Vec2{k * (d.x - (hx+ball_radius*2)) + 0.05f * (d.x - (hx+ball_radius*2)) * (d.x - (hx+ball_radius*2))+ du.x * 0.5f, k * (d.y - (hy+ball_radius*2)) + 0.05f * (d.y - (hy+ball_radius*2)) * (d.y - (hy+ball_radius*2))+ du.y * 0.5f};
+// }
+
 Vec2 ChainSystem::force_mag(Vec2 d, Vec2 du){ // num 15 is arbitrary (is in pixel units), it is the distance at which the force starts to be linear, before that it is quadratic to avoid instability
-    return((d.x >= 15)||(d.y >= 15)) ? Vec2{k * (d.x - (hx+ball_radius*2)) + du.x * 0.5f, k * (d.y - (hy+ball_radius*2)) + du.y * 0.5f}
-                    : Vec2{k * (d.x - (hx+ball_radius*2)) + 0.05f * (d.x - (hx+ball_radius*2)) * (d.x - (hx+ball_radius*2))+ du.x * 0.5f, k * (d.y - (hy+ball_radius*2)) + 0.05f * (d.y - (hy+ball_radius*2)) * (d.y - (hy+ball_radius*2))+ du.y * 0.5f};
+    return((d.x >= 15)||(d.y >= 15)) ? Vec2{k * (d.x - (hx+ball_radius*2)) + du.x * 0.5f, 0.f}
+                    : Vec2{k * (d.x - (hx+ball_radius*2)) + 0.05f * (d.x - (hx+ball_radius*2)) * (d.x - (hx+ball_radius*2))+ du.x * 0.5f, 0.f};
 }
 
 void ChainSystem::computeForces(){
@@ -87,7 +92,6 @@ void ChainSystem::integrate(float dt){
     for (int i = 0; i < N; i++){
         vel[i] = vel[i] + force[i]*dt;
         pos[i] = pos[i] + vel[i]*dt;
-
         // Boundary condition in the y direction 
         if (pos[i].x > (x_pixels - ball_radius)){
             pos[i].x = x_pixels - ball_radius;
