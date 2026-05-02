@@ -3,8 +3,8 @@
 #include <iostream>
 #include "SystemClass.hpp"
 
-int ball_radious = 1.f; // defines also the boundaries
-int N = 50; // number of balls, max_balls = y_pixels / (ball_radious*2)
+int ball_radious = 10.f; // defines also the boundaries
+int N = 10; // number of balls, max_balls = y_pixels / (ball_radious*2)
 int x_pixels = 800;
 int y_pixels = 600;
 int k = 50; // spring constant
